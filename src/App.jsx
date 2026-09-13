@@ -840,6 +840,10 @@ export default function TravelPlanner() {
         .mobile-total-bar {
           display: none;
         }
+        /* Close button only makes sense on the mobile drawer version of the ticket */
+        .ticket-close {
+          display: none;
+        }
 
         /* ===================== RESPONSIVE ===================== */
 
@@ -918,7 +922,7 @@ export default function TravelPlanner() {
           }
 
           .ticket-close {
-            display: flex;
+            display: flex !important;
             justify-content: flex-end;
             margin-bottom: 0.4rem;
           }
