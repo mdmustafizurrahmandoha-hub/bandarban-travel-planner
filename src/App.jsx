@@ -43,7 +43,7 @@ function dedupe(arr) {
 
 // Builds the day-by-day plan: which nights are spent where (travel/overnight-train
 // nights are never counted here, only actual stays), and what each day covers.
-function buildPlan(sel, remakri, bandarban, deboatkhum, coxsbazar, tier, plan2Night) {
+function buildPlan(sel, remakri, bandarban, debotakhum, coxsbazar, tier, plan2Night) {
   const core12 = [sel.lama && "Lama", sel.alikadam && "Alikadam"].filter(Boolean);
   const core123 = [sel.lama && "Lama", sel.alikadam && "Alikadam", sel.thanchi && "Thanchi"].filter(Boolean);
   const hub12 = sel.alikadam ? "Alikadam" : sel.lama ? "Lama" : null;
@@ -51,9 +51,9 @@ function buildPlan(sel, remakri, bandarban, deboatkhum, coxsbazar, tier, plan2Ni
 
   if (bandarban) {
     const lastDay = {
-      label: deboatkhum ? "Deboatkhum - Bandarban" : "Bandarban",
-      desc: deboatkhum
-        ? "Morning to noon at Deboatkhum, afternoon to evening around Bandarban, then the overnight train back to Dhaka."
+      label: debotakhum ? "Debotakhum - Bandarban" : "Bandarban",
+      desc: debotakhum
+        ? "Morning to noon at Debotakhum, afternoon to evening around Bandarban, then the overnight train back to Dhaka."
         : "Bandarban sightseeing, then the overnight train back to Dhaka.",
       isReturnDay: true,
     };
@@ -190,7 +190,7 @@ export default function TravelPlanner() {
   const [sel, setSel] = useState({ lama: false, alikadam: false, thanchi: false });
   const [remakri, setRemakri] = useState(false);
   const [bandarban, setBandarban] = useState(false);
-  const [deboatkhum, setDeboatkhum] = useState(false);
+  const [debotakhum, setDebotakhum] = useState(false);
   const [coxsbazar, setCoxsbazar] = useState(false);
 
   const [nightPicks, setNightPicks] = useState({});
@@ -245,23 +245,23 @@ export default function TravelPlanner() {
     const next = !bandarban;
     setBandarban(next);
     if (next) setCoxsbazar(false);
-    if (!next) setDeboatkhum(false);
+    if (!next) setDebotakhum(false);
   }
 
   function toggleCoxsbazar() {
     setCoxsbazar((v) => !v);
   }
 
-  function toggleDeboatkhum() {
-    setDeboatkhum((v) => !v);
+  function toggleDebotakhum() {
+    setDebotakhum((v) => !v);
   }
 
   const arrivalAtChakaria =
     departure === "Dhaka" && mode === "Mail" ? "11:30 AM (mail train + bus)" : "9:00 AM";
 
   const planResult = useMemo(
-    () => buildPlan(sel, remakri, bandarban, deboatkhum, coxsbazar, tier, plan2Night),
-    [sel, remakri, bandarban, deboatkhum, coxsbazar, tier, plan2Night]
+    () => buildPlan(sel, remakri, bandarban, debotakhum, coxsbazar, tier, plan2Night),
+    [sel, remakri, bandarban, debotakhum, coxsbazar, tier, plan2Night]
   );
   const nightsList = planResult.nights;
   const daysList = planResult.days;
@@ -303,8 +303,8 @@ export default function TravelPlanner() {
       const cost = tier === "thanchi" ? 1000 : tier === "alikadam" ? 1150 : 1250;
       rows.push({ label: `${TIER_NAME[tier]} → Bandarban`, cost });
     }
-    if (bandarban && deboatkhum) {
-      rows.push({ label: "Bandarban → Deboatkhum", cost: 500 });
+    if (bandarban && debotakhum) {
+      rows.push({ label: "Bandarban → Debotakhum", cost: 500 });
     }
     if (!bandarban && coxsbazar && tier) {
       const base = tier === "thanchi" ? 350 : 200;
@@ -312,7 +312,7 @@ export default function TravelPlanner() {
       rows.push({ label: "Cox's Bazar surcharge", cost: 400 });
     }
     return rows;
-  }, [sel, remakri, bandarban, deboatkhum, coxsbazar, tier]);
+  }, [sel, remakri, bandarban, debotakhum, coxsbazar, tier]);
 
   const destinationTotal = destinationBreakdown.reduce((s, r) => s + r.cost, 0);
 
@@ -366,7 +366,7 @@ export default function TravelPlanner() {
 
   const anyGatewayChosen = !!tier;
   const canPickBandarban = anyGatewayChosen;
-  const canPickDeboatkhum = bandarban;
+  const canPickDebotakhum = bandarban;
   const canPickCoxsbazar = anyGatewayChosen && !bandarban;
 
   const routeLabel = tier
@@ -1017,16 +1017,16 @@ export default function TravelPlanner() {
                     )}
                   </label>
 
-                  <label className={`option ${deboatkhum ? "selected" : ""} ${!canPickDeboatkhum ? "disabled" : ""}`}>
+                  <label className={`option ${debotakhum ? "selected" : ""} ${!canPickDebotakhum ? "disabled" : ""}`}>
                     <input
                       type="checkbox"
-                      checked={deboatkhum}
-                      disabled={!canPickDeboatkhum}
-                      onChange={toggleDeboatkhum}
+                      checked={debotakhum}
+                      disabled={!canPickDebotakhum}
+                      onChange={toggleDebotakhum}
                     />
-                    <span className="name">Deboatkhum</span>
+                    <span className="name">Debotakhum</span>
                     <span className="cost">{fmt(500)}</span>
-                    {!canPickDeboatkhum && (
+                    {!canPickDebotakhum && (
                       <span className="why-not">Requires Bandarban</span>
                     )}
                   </label>
