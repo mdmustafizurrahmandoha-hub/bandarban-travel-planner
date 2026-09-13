@@ -182,7 +182,6 @@ function Counter({ value, onChange, min = 0, step = 1 }) {
 }
 
 export default function TravelPlanner() {
-  const [theme, setTheme] = useState("light");
   const [departure, setDeparture] = useState("Dhaka");
   const [mode, setMode] = useState("Intercity");
   const [trainId, setTrainId] = useState("mohanagar");
@@ -200,6 +199,7 @@ export default function TravelPlanner() {
   const [travelers, setTravelers] = useState(1);
   const [returnMode, setReturnMode] = useState("Intercity");
   const [dark, setDark] = useState(false);
+  const [ticketOpen, setTicketOpen] = useState(false);
 
   const trainOptions =
     departure === "Dhaka" ? TRAINS.Dhaka[mode] : TRAINS.Kishoreganj.Direct;
@@ -405,8 +405,9 @@ export default function TravelPlanner() {
           padding: 2.75rem 1.5rem 5rem;
           min-height: 100%;
           box-sizing: border-box;
+          overflow-x: hidden;
         }
-        .app *, .app *::before, .app *::after { box-sizing: border-box; }
+        .app *, .app *::before, .app *::after { box-sizing: border-box; min-width: 0; }
 
         .shell {
           max-width: 1120px;
@@ -431,7 +432,7 @@ export default function TravelPlanner() {
         .masthead h1 {
           font-family: 'Fraunces', serif;
           font-weight: 600;
-          font-size: clamp(2.1rem, 3.8vw, 3rem);
+          font-size: clamp(1.7rem, 6vw, 3rem);
           margin: 0;
           color: var(--cream);
           line-height: 1.12;
@@ -450,14 +451,12 @@ export default function TravelPlanner() {
           gap: 2.2rem;
           align-items: start;
         }
-        @media (max-width: 900px) {
-          .layout { grid-template-columns: 1fr; }
-        }
 
         .rail-steps {
           display: flex;
           flex-direction: column;
           gap: 1.6rem;
+          min-width: 0;
         }
 
         .step {
@@ -465,6 +464,7 @@ export default function TravelPlanner() {
           display: grid;
           grid-template-columns: 30px 1fr;
           gap: 1rem;
+          min-width: 0;
         }
         .step-marker {
           display: flex;
@@ -497,6 +497,7 @@ export default function TravelPlanner() {
           padding: 1.6rem 1.7rem 1.7rem;
           box-shadow: 0 12px 32px -12px rgba(122,19,56,0.22), inset 0 1px 0 rgba(255,255,255,0.6);
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          min-width: 0;
         }
         .card h2 {
           font-family: 'Fraunces', serif;
@@ -529,6 +530,7 @@ export default function TravelPlanner() {
           color: var(--cream);
           cursor: pointer;
           transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+          -webkit-tap-highlight-color: transparent;
         }
         .pill:hover { border-color: var(--brass); transform: translateY(-1px); }
         .pill:active { transform: translateY(0); }
@@ -558,6 +560,8 @@ export default function TravelPlanner() {
           background: var(--panel-2);
           backdrop-filter: blur(12px);
           transition: border-color 0.15s ease, background 0.15s ease;
+          min-width: 0;
+          -webkit-tap-highlight-color: transparent;
         }
         .option:hover { border-color: rgba(179,25,94,0.4); }
         .option.selected { border-color: var(--brass); background: var(--panel-3); }
@@ -565,8 +569,8 @@ export default function TravelPlanner() {
           opacity: 0.42;
           cursor: not-allowed;
         }
-        .option input { accent-color: var(--brass); width: 18px; height: 18px; }
-        .option .name { font-size: 1.1rem; font-weight: 500; }
+        .option input { accent-color: var(--brass); width: 18px; height: 18px; flex-shrink: 0; }
+        .option .name { font-size: 1.1rem; font-weight: 500; word-break: break-word; }
         .option .meta { font-size: 0.88rem; color: var(--sage); display: block; margin-top: 0.15rem; line-height: 1.4; }
         .option .day-desc {
           font-size: 1.02rem;
@@ -582,6 +586,7 @@ export default function TravelPlanner() {
           font-size: 1rem;
           color: var(--brass);
           font-weight: 700;
+          white-space: nowrap;
         }
         .option .why-not {
           grid-column: 2 / span 2;
@@ -634,6 +639,7 @@ export default function TravelPlanner() {
           padding: 1rem 1.1rem;
           background: var(--panel-2);
           backdrop-filter: blur(12px);
+          min-width: 0;
         }
         .cost-block + .cost-block { margin-top: 0.8rem; }
         .cost-block .cost-label {
@@ -668,6 +674,7 @@ export default function TravelPlanner() {
           padding: 1.7rem 1.6rem;
           font-family: 'IBM Plex Mono', monospace;
           box-shadow: 0 18px 40px -20px rgba(122,19,56,0.35);
+          min-width: 0;
         }
         .ticket .t-head {
           font-family: 'Fraunces', serif;
@@ -743,6 +750,7 @@ export default function TravelPlanner() {
           font-size: 1.2rem;
           line-height: 1;
           transition: background 0.15s ease, transform 0.1s ease, color 0.15s ease;
+          -webkit-tap-highlight-color: transparent;
         }
         .counter button:hover { background: var(--brass); color: #fff5f9; }
         .counter button:active { transform: scale(0.94); }
@@ -794,6 +802,11 @@ export default function TravelPlanner() {
         .app.dark .pill.active { border-color: var(--brass); }
         .app.dark .step-dot { box-shadow: 0 0 0 4px rgba(224,85,155,0.28); }
         .app.dark .ticket { box-shadow: 0 18px 40px -18px rgba(0,0,0,0.6); }
+        .app.dark .mobile-total-bar {
+          background: rgba(27,18,32,0.92);
+          border-top-color: rgba(255,255,255,0.14);
+        }
+        .app.dark .mobile-total-bar .mtb-val { color: var(--brass-bright); }
 
         .masthead-top {
           display: flex;
@@ -818,9 +831,157 @@ export default function TravelPlanner() {
           font-weight: 500;
           transition: border-color 0.15s ease, transform 0.1s ease;
           flex-shrink: 0;
+          -webkit-tap-highlight-color: transparent;
         }
         .theme-toggle:hover { border-color: var(--brass); transform: translateY(-1px); }
         .app.dark .theme-toggle { border-color: rgba(255,255,255,0.16); }
+
+        /* Mobile bottom bar: collapsed running total, tap to expand the full ticket */
+        .mobile-total-bar {
+          display: none;
+        }
+
+        /* ===================== RESPONSIVE ===================== */
+
+        @media (max-width: 900px) {
+          .layout {
+            grid-template-columns: 1fr;
+            gap: 1.4rem;
+          }
+
+          /* Ticket becomes an on-demand drawer opened from the bottom bar */
+          .ticket {
+            position: fixed;
+            left: 0.75rem;
+            right: 0.75rem;
+            bottom: 0.75rem;
+            top: auto;
+            max-height: min(78vh, 640px);
+            overflow-y: auto;
+            z-index: 60;
+            transform: translateY(calc(100% + 1.5rem));
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.28s ease, opacity 0.22s ease;
+          }
+          .ticket.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+          }
+
+          .mobile-total-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            position: fixed;
+            left: 0.75rem;
+            right: 0.75rem;
+            bottom: 0.75rem;
+            z-index: 61;
+            background: rgba(255,250,243,0.94);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 16px;
+            padding: 0.85rem 1.1rem;
+            box-shadow: 0 12px 30px -12px rgba(122,19,56,0.4);
+            font-family: 'IBM Plex Mono', monospace;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+          }
+          .mobile-total-bar .mtb-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+            min-width: 0;
+          }
+          .mobile-total-bar .mtb-label {
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            color: #a5677a;
+          }
+          .mobile-total-bar .mtb-val {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--brick);
+          }
+          .mobile-total-bar .mtb-btn {
+            flex-shrink: 0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.92rem;
+            padding: 0.6rem 1.05rem;
+            border-radius: 999px;
+            background: var(--brass);
+            color: #fff5f9;
+          }
+
+          .ticket-close {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 0.4rem;
+          }
+          .ticket-close button {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #8a5c6a;
+            background: rgba(122,19,56,0.08);
+            border: none;
+            border-radius: 999px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+          }
+
+          /* Leave room at the bottom of the page for the fixed bar */
+          .shell { padding-bottom: 4.5rem; }
+        }
+
+        @media (max-width: 640px) {
+          .app {
+            font-size: 16px;
+            padding: 1.75rem 1rem 1.5rem;
+          }
+          .masthead { margin-bottom: 1.7rem; padding-bottom: 1.2rem; }
+          .masthead p { font-size: 1rem; }
+          .card { padding: 1.25rem 1.1rem 1.35rem; border-radius: 16px; }
+          .card h2 { font-size: 1.2rem; }
+          .step { grid-template-columns: 22px 1fr; gap: 0.7rem; }
+          .step-dot { width: 11px; height: 11px; }
+          .rail-steps { gap: 1.2rem; }
+
+          .option {
+            grid-template-columns: 18px 1fr;
+            row-gap: 0.35rem;
+            padding: 0.8rem 0.9rem;
+          }
+          .option .cost {
+            grid-column: 2;
+            justify-self: start;
+            font-size: 0.95rem;
+          }
+          .option .why-not { grid-column: 2; }
+
+          .pill { padding: 0.55rem 0.95rem; font-size: 0.95rem; }
+
+          .theme-toggle { padding: 0.5rem 0.85rem; font-size: 0.85rem; }
+          .masthead-top { gap: 0.7rem; }
+
+          .field-grid { grid-template-columns: 1fr 1fr; }
+
+          .ticket { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; padding: 1.4rem 1.2rem; }
+          .mobile-total-bar { left: 0.5rem; right: 0.5rem; bottom: 0.5rem; }
+        }
+
+        @media (max-width: 380px) {
+          .field-grid { grid-template-columns: 1fr; }
+          .mobile-total-bar .mtb-val { font-size: 1.15rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .ticket, .pill, .theme-toggle, .counter button { transition: none; }
+        }
       `}</style>
 
       <div className="shell">
@@ -1193,8 +1354,11 @@ export default function TravelPlanner() {
             </div>
           </div>
 
-          {/* Ticket summary */}
-          <div className="ticket">
+          {/* Ticket summary — a normal sticky panel on desktop, a slide-up drawer on mobile */}
+          <div className={`ticket ${ticketOpen ? "open" : ""}`}>
+            <div className="ticket-close">
+              <button type="button" onClick={() => setTicketOpen(false)}>Close</button>
+            </div>
             <div className="t-head">
               <span>Fare</span>
               <span>{departure === "Dhaka" ? "DHK" : "KIS"} → {routeLabel}</span>
@@ -1261,7 +1425,15 @@ export default function TravelPlanner() {
           </div>
         </div>
       </div>
+
+      {/* Mobile-only collapsed total bar, tap to open the full ticket drawer */}
+      <div className="mobile-total-bar" onClick={() => setTicketOpen(true)} role="button" tabIndex={0}>
+        <div className="mtb-left">
+          <span className="mtb-label">{travelers > 1 ? `TOTAL · ${travelers} TRAVELERS` : "TOTAL PER PERSON"}</span>
+          <span className="mtb-val">{fmt(travelers > 1 ? groupTotal : perPersonTotal)}</span>
+        </div>
+        <span className="mtb-btn">View fare</span>
+      </div>
     </div>
   );
 }
-
